@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>FortalCE</title>
+<style>
+ body{margin:0;display:flex;gap:6px;align-items:center;height:56px;padding:0 10px;box-sizing:border-box;
+  font-family:system-ui,sans-serif;background:linear-gradient(90deg,#ff8a3d,#ff5e62 55%,#7b2ff7)}
+ button{border:0;border-radius:8px;width:36px;height:36px;font-size:18px;cursor:pointer;background:#ffffffcc}
+ button:hover{background:#fff}
+ input{flex:1;height:36px;border:0;border-radius:18px;padding:0 16px;font-size:15px;outline:none}
+</style></head><body>
+<button onclick="a('voltar')" title="Voltar">&#9664;</button>
+<button onclick="a('avancar')" title="Avancar">&#9654;</button>
+<button onclick="a('recarregar')" title="Recarregar">&#10227;</button>
+<input id="u" placeholder="Pesquise ou digite um endereco" autofocus>
+<button onclick="ir()" title="Ir">&#10140;</button>
+<script>
+ const inv=(c,p)=>window.__TAURI__.core.invoke(c,p).catch(e=>alert(e));
+ const a=n=>inv('acao',{nome:n});
+ const ir=()=>inv('navegar',{url:document.getElementById('u').value});
+ document.getElementById('u').addEventListener('keydown',e=>{if(e.key==='Enter')ir()});
+</script></body></html>
