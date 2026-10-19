@@ -40,6 +40,7 @@ jobs:
           args: ${{ matrix.args }}
 
   android:
+    needs: desktop
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -60,7 +61,15 @@ jobs:
       - run: npx tauri icon app-icon.svg
       - run: npx tauri android init
       - run: npx tauri android build --apk --debug --target aarch64
+      - name: Preparar APK
+        run: |
+          APK=$(find src-tauri/gen/android -name '*.apk' | head -n 1)
+          cp "$APK" FortalCE_0.1.0_android.apk
       - uses: actions/upload-artifact@v4
         with:
           name: FortalCE-android-apk
-          path: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+          path: FortalCE_0.1.0_android.apk
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.1.0
+          files: FortalCE_0.1.0_android.apk
