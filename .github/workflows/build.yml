@@ -45,19 +45,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with: { distribution: temurin, java-version: 17 }
       - uses: android-actions/setup-android@v3
+        with:
+          packages: ''
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
       - run: |
-          sdkmanager "ndk;27.0.12077973"
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;27.0.12077973"
           echo "NDK_HOME=$ANDROID_HOME/ndk/27.0.12077973" >> $GITHUB_ENV
       - run: npm install
       - run: npx tauri icon app-icon.svg
       - run: npx tauri android init
-      - run: npx tauri android build --apk --debug
+      - run: npx tauri android build --apk --debug --target aarch64
       - uses: actions/upload-artifact@v4
         with:
           name: FortalCE-android-apk
